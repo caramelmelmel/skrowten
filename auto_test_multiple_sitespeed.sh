@@ -10,18 +10,18 @@ tc qdisc add dev docker1 parent 1:12 netem delay 150ms
 
 echo 'Browsertime Running 3g and 3g slow'
 http3WebsitesFile="./testing_sites.txt"
-outputFolder = "testingOutput"
+outputFolder='testingOutput'
 
 counter=1
 
 while IFS= read -r site
 do
 	echo "--------- $site ------------"
-	docker run --rm -v "$(pwd):/sitespeed.io" sitespeedio/sitespeed.io:11.0.0-plus1 --network=3g -c 3g --iterations 3 --prettyPrint true --cacheClearRaw true --preURL https://www.lazada.sg/ --outputFolder '$outputFolder' $site --plugins.add analysisstorer --plugins.add /lighthouse
+	docker run --rm -v "$(pwd):/sitespeed.io" sitespeedio/sitespeed.io:11.0.0-plus1 --network=3g -c 3g --iterations 3 --prettyPrint true --cacheClearRaw true --preURL https://www.lazada.sg/ --outputFolder "$outputFolder" $site --plugins.add analysisstorer --plugins.add /lighthouse
 
 	echo "-----Done $counter HTTP2-----"
 
-	docker run --rm -v "$(pwd):/sitespeed.io" sitespeedio/sitespeed.io:20.5.0-plus1 --network=3g -c 3g --iterations 3 --prettyPrint true --cacheClearRaw true --preURL https://www.lazada.sg/ --outputFolder '$outputFolder' $site --plugins.add analysisstorer --plugins.add /lighthouse
+	docker run --rm -v "$(pwd):/sitespeed.io" sitespeedio/sitespeed.io:20.5.0-plus1 --network=3g -c 3g --iterations 3 --prettyPrint true --cacheClearRaw true --preURL https://www.lazada.sg/ --outputFolder "$outputFolder" $site --plugins.add analysisstorer --plugins.add /lighthouse
 
 
 	echo "-----Done $counter HTTP3-----"
