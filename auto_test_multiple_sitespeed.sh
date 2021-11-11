@@ -17,11 +17,11 @@ counter=1
 while IFS= read -r site
 do
 	echo "--------- $site ------------"
-	docker run --rm -v "$(pwd):/sitespeed.io" sitespeedio/sitespeed.io:11.0.0-plus1 --network=3g -c 3g --iterations 3 --prettyPrint true --cacheClearRaw true --preURL https://www.lazada.sg/ --outputFolder "$outputFolder" $site --plugins.add analysisstorer --plugins.add /lighthouse
+	docker run --rm -v "$(pwd):/sitespeed.io" sitespeedio/sitespeed.io:20.5.0-plus1 --network=3g -c 3g --iterations 3 --prettyPrint true --cacheClearRaw true --preURL https://www.lazada.sg/ --outputFolder "BrowserTimeResults/bandwidth/Hannah/0Mbps/2" $site --plugins.add analysisstorer --plugins.add /lighthouse --chrome.args="--disable-quic"
 
 	echo "-----Done $counter HTTP2-----"
 
-	docker run --rm -v "$(pwd):/sitespeed.io" sitespeedio/sitespeed.io:20.5.0-plus1 --network=3g -c 3g --iterations 3 --prettyPrint true --cacheClearRaw true --preURL https://www.lazada.sg/ --outputFolder "$outputFolder" $site --plugins.add analysisstorer --plugins.add /lighthouse
+	docker run --rm -v "$(pwd):/sitespeed.io" sitespeedio/sitespeed.io:20.5.0-plus1 --network=3g -c 3g --iterations 3 --prettyPrint true --cacheClearRaw true --preURL https://www.lazada.sg/ --outputFolder "BrowserTimeResults/bandwidth/Hannah/0Mbps/3" $site --plugins.add analysisstorer --plugins.add /lighthouse
 
 
 	echo "-----Done $counter HTTP3-----"
