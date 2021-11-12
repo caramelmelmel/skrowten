@@ -86,6 +86,7 @@ do
 			tc qdisc add dev docker1 root handle 1: htb default 12
 			tc class add dev docker1 parent 1:1 classid 1:12 htb rate $(($networkImpairmentAmount*8))mbit ceil $(($networkImpairmentAmount*8))mbit
 
+
 			networkImpairmentFolder="$networkImpairmentAmount"Mbps
 			((networkImpairmentAmount+=bandwidthIntervalSize))  # Prepare network impairment value for NEXT RUN
 			;;

@@ -15,8 +15,8 @@ provided root directory.
 
 Returns: csv file path. 
 '''
-def createCSVFromJsons(rootPath, currTime, throttleType, comrade):
-    resultsDir = os.path.join(rootPath, kw.BT_CUSTOM_DIR, throttleType, comrade)
+def createCSVFromJsons(rootPath, currTime, throttleType, site_list_version):
+    resultsDir = os.path.join(rootPath, kw.BT_CUSTOM_DIR, throttleType, site_list_version)
     if not os.path.exists(resultsDir):
         print(resultsDir, "directory not found in root path.")
         sys.exit(1)
@@ -30,14 +30,15 @@ def createCSVFromJsons(rootPath, currTime, throttleType, comrade):
 
     includeHeader = True
 
-    throttleparameters = os.listdir(resultsDir)
-    for throttleparameter in throttleparameters:
-        for httpDirName in kw.HTTP_DIR_LIST:
-            httpDir = os.path.join(resultsDir, throttleparameter, httpDirName)
-            for BTJsonFile, harPath, lighthousePath in getJsonHarFilePaths(httpDir):
+    for httpDirName in kw.HTTP_DIR_LIST:
+        httpDir = os.path.join(resultsDir, httpDirName)
+        throttleparameters = os.listdir(httpDir)
+        for throttleparameter in throttleparameters:
+            currDir = os.path.join(httpDir, throttleparameter)
+            for BTJsonFile, harPath, lighthousePath in getJsonHarFilePaths(currDir):
                 cleanedPdData = getCleanedPandas(
                     BTJsonFile, harPath, lighthousePath, 
-                    throttleType, throttleparameter, comrade)
+                    throttleType, throttleparameter)
                 if cleanedPdData is not None:
                     cleanedPdData.to_csv(csvFilePath, mode='a', header=includeHeader)
                     includeHeader = False
@@ -56,7 +57,7 @@ def checkHasFailed(result):
 
 '''
 In the sitespeed-results directory, the conventional path used is:
-    CUSTOM_DIR/THROTTLE_TYPE/COMRADE_NAME/THROTTLE_PARAMS/HTTP_VERSION/pages/PAGE_NAME/data
+    CUSTOM_DIR/THROTTLE_TYPE/SITE_LIST_VERSION/HTTP_VERSION/THROTTLE_PARAMS/pages/PAGE_NAME/data
 where FILE is either browsertime.pageSummary.json or lighthouse.pageSummary.json
     or browsertime.har.
 
@@ -166,11 +167,6 @@ def getBTJsonInfo(extractedData, BTJsonFile):
         print(BTJsonFile, "was marked as failed.")
         return False
 
-    # Get fully loaded timings.
-    titles = kw.BTJsonArgs.FULL_LOADED_TITLES
-    for i in range(len(titles)):
-        extractedData[titles[i]] = data[kw.BTJsonArgs.FULLY_LOADED][i]
-
     # Get websites and timing
     infoSubJson = data[kw.BTJsonArgs.INFO]
     getSubJsonInfo(extractedData, infoSubJson, kw.BTJsonArgs.INFO_LIST, BTJsonFile)
@@ -227,7 +223,7 @@ and puts them into a pandas dataframe.
 
 Returns a pandas dataframe. 
 '''
-def getCleanedPandas(BTJsonFile, harFile, lighthouseFilePath, throttleType, throttleparameter, comrade):
+def getCleanedPandas(BTJsonFile, harFile, lighthouseFilePath, throttleType, throttleparameter):
     extractedData = {}
     
     # Get Browsertime Info
@@ -238,7 +234,6 @@ def getCleanedPandas(BTJsonFile, harFile, lighthouseFilePath, throttleType, thro
 
     extractedData["throttleType"] = throttleType
     extractedData["throttleparameter"] = throttleparameter
-    extractedData["comrade"] = comrade
 
     # Get HTTP version
     extractedData[kw.HAR_HTTP_VERSION_SUB] = getHTTPVersion(harFile)

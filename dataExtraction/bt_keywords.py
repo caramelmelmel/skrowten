@@ -6,8 +6,8 @@ CSV_FILE = "cleaned_data" # cleaned_data_STARTTIME.csv
 EXTRACT_DATA_DIR = "extract_data"
 PLOT_DIR = "plot_dir"
 BT_CUSTOM_DIR = "BrowserTimeResults"
-CUSTOM_HTTP2_DIR = "2"
-CUSTOM_HTTP3_DIR = "3"
+CUSTOM_HTTP2_DIR = "HTTP2_testing"
+CUSTOM_HTTP3_DIR = "HTTP3_testing"
 
 HTTP_DIR_LIST = [CUSTOM_HTTP2_DIR, CUSTOM_HTTP3_DIR]
 
@@ -41,7 +41,6 @@ class BTJsonArgs:
     # Root json keys
     FAILURE = "markedAsFailure" 
     STATISTICS = "statistics"
-    FULLY_LOADED = "fullyLoaded"
     INFO = "info"
 
     # Json Keys that lead to more sub jsons
@@ -58,6 +57,7 @@ class BTJsonArgs:
     TTFB = "ttfb"
     LOADED_EVENT_END = "loadEventEnd" 
     FIRST_PAINT = "firstPaint"
+    FULLY_LOADED = "fullyLoaded"
 
     DOM_COMPLETE = "domComplete"
     DOM_ELEMENTS = "domElements"
@@ -66,11 +66,6 @@ class BTJsonArgs:
     PROFILE = "profile"
     TIMESTAMP = "timestamp" 
     URL = "url" 
-
-    # Titles for non-titled information in the json
-    FL_MEDIAN = "fullyLoaded_median"
-    FL_MEAN = "fullyLoaded_mean"
-    FL_STDEV = "fullyLoaded_stddev"
 
     # stats wanted
     MEDIAN = "median"
@@ -93,21 +88,13 @@ class BTJsonArgs:
         TTFB,
         LOADED_EVENT_END , 
         FIRST_PAINT, 
+        FULLY_LOADED
     ]
 
     # statistics.timings.navigationTiming
     STATS_NAV_TIMING_LIST = [
-        DOM_COMPLETE
-    ]
-
-    # statistics.timings.paintTiming "first-contentful-paint"
-    
-    # fullyLoaded is an array without title
-    FULL_LOADED_TITLES = [
-        FL_MEDIAN, 
-        FL_MEAN, 
-        FL_STDEV, 
-    ]
+        DOM_COMPLETE, 
+    ]    
 
     # states wanted from each statistics page
     STATS_WANTED = [
