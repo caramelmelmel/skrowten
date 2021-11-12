@@ -107,17 +107,16 @@ do
 	while IFS= read -r site
 	do
 		echo "--------- $site ------------"
-		# docker run --rm -v "$(pwd):/sitespeed.io" sitespeedio/sitespeed.io:$browsertimeVersion \
-		# 	--network=3g -c 3g -n $iterations --video false --visualMetrics false --prettyPrint true --cacheClearRaw true \
-		# 	--preURL $preURL --outputFolder "$baseTestingFolder/$networkImpairment/$testingSiteTxtName/$outputFolderHTTP2/$networkImpairmentFolder" $site \
-		# 	--plugins.add analysisstorer --plugins.add /lighthouse --chrome.args="--disable-quic"
+		docker run --rm -v "$(pwd):/sitespeed.io" sitespeedio/sitespeed.io:$browsertimeVersion \
+			--network=3g -c 3g -n $iterations --video false --visualMetrics false --prettyPrint true --cacheClearRaw true \
+			--preURL $preURL --outputFolder "$baseTestingFolder/$networkImpairment/$testingSiteTxtName/$outputFolderHTTP2/$networkImpairmentFolder" $site \
+			--plugins.add analysisstorer --plugins.add /lighthouse --chrome.args="--disable-quic"
 
 		echo "----- Done Site $siteCounter ($site) HTTP2 with $networkImpairmentFolder $networkImpairment -----"
-
-		# docker run --rm -v "$(pwd):/sitespeed.io" sitespeedio/sitespeed.io:$browsertimeVersion \
-		# 	--network=3g -c 3g -n $iterations --video false --visualMetrics false --prettyPrint true --cacheClearRaw true \
-		# 	--preURL $preURL --outputFolder "$baseTestingFolder/$networkImpairment/$testingSiteTxtName/$outputFolderHTTP3/$networkImpairmentFolder" $site \
-		# 	--plugins.add analysisstorer --plugins.add /lighthouse
+		docker run --rm -v "$(pwd):/sitespeed.io" sitespeedio/sitespeed.io:$browsertimeVersion \
+			--network=3g -c 3g -n $iterations --video false --visualMetrics false --prettyPrint true --cacheClearRaw true \
+			--preURL $preURL --outputFolder "$baseTestingFolder/$networkImpairment/$testingSiteTxtName/$outputFolderHTTP3/$networkImpairmentFolder" $site \
+			--plugins.add analysisstorer --plugins.add /lighthouse
 
 		echo "----- Done Site $siteCounter ($site) HTTP3 $networkImpairmentFolder $networkImpairment -----"
 
