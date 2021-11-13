@@ -46,8 +46,8 @@ networkImpairmentAmount=0
 delayIntervalSize=100  # 0ms to 1000ms
 bandwidthIntervalSize=80  # 0Mbps to 1000Mbps
 packetLossIntervalSize=0.15  # 0% to 1.5%
-noOfIntervals=2  # 11
-iterations=1  # Number of repeated trials ran for each website in every run
+noOfIntervals=11  # 11
+iterations=3  # Number of repeated trials ran for each website in every run
 
 # Counters
 intervalCounter=1
