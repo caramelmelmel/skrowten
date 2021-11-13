@@ -58,7 +58,7 @@ do
 	echo 'Stopping Docker networks'
 	docker network rm 3g
 
-	# Setup docker bridge with specified network impairment, prepare networkImpairmentFolder and increment for next run
+	# Setup docker bridge with specified network impairment, prepare networkImpairmentFolder, increment networkImpairmentAmount for next run
 	case $networkImpairment in
 
 		delay)
