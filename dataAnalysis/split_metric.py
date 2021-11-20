@@ -39,6 +39,10 @@ for row in reader:
     writer.writerow(row)
 
 print('completed segmentation')
+filein.close()
+file_bandwidth.close()
+file_delay.close()
+file_packet_loss.close()
     
     
     
