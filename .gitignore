@@ -10,3 +10,8 @@
 !**/pages/*/data/browsertime.pageSummary.json
 !**/pages/*/data/browsertime.har
 !**/pages/*/data/lighthouse.pageSummary.json
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class

@@ -43,7 +43,3 @@ filein.close()
 file_bandwidth.close()
 file_delay.close()
 file_packet_loss.close()
-    
-    
-    
-    
