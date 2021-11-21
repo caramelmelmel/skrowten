@@ -6,7 +6,7 @@ input_mapper_y = {
     5: "domComplete_mean",
     6: "domComplete_median",
     7: "fullyLoaded_mean",
-    8: "fullyLoaded_median"
+    8: "fullyLoaded_median",
 }
 
 input_mapper_y_label = {
@@ -17,7 +17,7 @@ input_mapper_y_label = {
     5: "domComplete (mean)",
     6: "domComplete (median)",
     7: "fullyLoaded (mean)",
-    8: "fullyLoaded (median)"
+    8: "fullyLoaded (median)",
 }
 
 website_mapper = {
@@ -27,8 +27,9 @@ website_mapper = {
     4: "https://www.instagram.com/",
     5: "https://www.vk.com/",
     6: "https://www.canva.com/",
-    7:"https://www.whatsapp.com/",
-    8:"https://www.forbes.com/",
-    9:"https://www.glassdoor.com/",
-    10:"https://www.live.com/"
+    7: "https://www.whatsapp.com/",
+    8: "https://www.forbes.com/",
+    9: "https://www.glassdoor.com/",
+    10: "https://www.live.com/",
+    11: "average",
 }

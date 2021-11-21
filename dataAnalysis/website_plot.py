@@ -141,12 +141,3 @@ if __name__ == "__main__":
     plt.title(website + " "+metric)
 
     plot_graphs(filein,website,args.x_label,input_mapper_y[args.y_label])
-
-    
-
-    
-
-    
-    
-
-    
