@@ -16,8 +16,12 @@ from constant_mapper import input_mapper_y, input_mapper_y_label,website_mapper
 
 #plot two lines at once
 def plot_http_ver_comparison(http2_x_ls, http2_y_ls, http3_x_ls, http3_y_ls,fig_file_p):
-    plt.plot(http2_x_ls,http2_y_ls,label='HTTP 2')
-    plt.plot(http3_x_ls,http3_y_ls,label='HTTP 3')
+    print(http2_x_ls)
+    print(http2_y_ls)
+    print(http3_x_ls)
+    print(http3_y_ls)
+    plt.scatter(http2_x_ls,http2_y_ls,label='HTTP 2',c='#FF0000')
+    plt.scatter(http3_x_ls,http3_y_ls,label='HTTP 3',c='#FFA500')
     plt.legend()
     #save into a dir 
     plt.savefig(fig_file_p)
@@ -63,8 +67,10 @@ def plot_graphs(filein,website,x_label,y_input):
         if http_v == 3:
             http3_x.append(x_value)
             http3_y.append(row[y_input])
+    print(len(http2_x))
+    print(len(http2_y)) 
     save_file = f"results_graphs/{website}/{y_input}.png"
-    plot_http_ver_comparison(http2_x,http2_y,http3_x,http3_y,save_file)
+    plot_http_ver_comparison(sorted(http2_x),sorted(http2_y),sorted(http3_x),sorted(http3_y),save_file)
         
 
 
