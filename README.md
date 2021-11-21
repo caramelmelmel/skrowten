@@ -77,16 +77,34 @@ python split_metric.py
    The only valid arguments are `delay`, `packetLoss` and `bandwidth`. Key in the EXACT syntax so that no exceptions are raised.
    <br/>
    <br/>
-   b. `-w` write the name of the website not the domain. The only valid arguments are `facebook`, `vk`,`instagram`,`whatsapp`, `canva`, `glassdoor`, any website name in the excel sheet works.
+   b. `-w` write the integer of the website that you want. The manual is as follows:<br/>
+   1- google <br/>
+   2- facebook <br/>
+   3- youtube <br/>
+   4- instagram <br/>
+   5- vk <br/>
+   6- canva <br/>
+   7- whatsapp <br/>
+   8- forbes <br/>
+   9- glassdoor <br/>
+   10- live
    <br/>
    <br/>
-   c. `-yaxis` write the name of the y axis that you would like to label.
+   c. `-yaxis` same thing, write the number of the measurement metric that you would like
+   1- speed index score <br/>
+   2- lighthouse performance <br/>
+   3- ttfb mean (ttfb - time to first byte) <br/>
+   4- ttfb median <br/>
+   5- domComplete mean <br/>
+   6- domComplete median <br/>
+   7- fullyLoaded (mean) <br/>
+   8- fullyLoaded (median)
 
 d. `-xaxis` write the name of any of the column headers in the excel sheet.
 
 An example of how to call the script would be the following:
 
 ```
-python3 website_plot.py -m "delay" -w "facebook" -yaxis "lighthouse performance" -xaxis "throttleparameter"
+python3 website_plot.py -m "delay" -w 2 -yaxis 2 -xaxis "throttleparameter"
 
 ```
