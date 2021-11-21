@@ -1,6 +1,5 @@
 import bt_keywords as kw 
 import create_csv_utils_custom_dir as csv_util
-import plot_graphs as pg 
 
 from datetime import datetime
 import sys
@@ -30,10 +29,8 @@ def getThrottleChoicePrompt():
 
 def main(throttleType, site_list_version_num, rootPath):
     currTime = datetime.now()
-    site_list_version = TEST_SITE_DIR + str(site_list_version_num)
+    site_list_version = TEST_SITE_DIR + str(site_list_version_num) 
     csvFilePath = csv_util.createCSVFromJsons(rootPath, currTime, throttleType, site_list_version)
-    for connectivity in CONNECTIVITY_TESTED:
-        pg.generatePlots(csvFilePath, rootPath, currTime, connectivity)
     
 if __name__ == "__main__":
     if len(sys.argv) > 4 or len(sys.argv) < 3:

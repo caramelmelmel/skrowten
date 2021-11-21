@@ -11,6 +11,9 @@ CUSTOM_HTTP3_DIR = "HTTP3_testing"
 
 HTTP_DIR_LIST = [CUSTOM_HTTP2_DIR, CUSTOM_HTTP3_DIR]
 
+NUM_HTTP2_REPONSES = "num_http2_responses"
+NUM_HTTP3_REPONSES = "num_http3_responses"
+
 # SpeedIO also uses browsertime
 SPEED_IO_ROOT_DIR = "sitespeed-result"
 # results are in pages/PAGE_NAME/data

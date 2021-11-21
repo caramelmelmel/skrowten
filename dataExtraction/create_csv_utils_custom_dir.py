@@ -89,20 +89,30 @@ def getJsonHarFilePaths(rootPath):
 A session is considered to have used HTTP3 if at least one of the HTTP response messages
 in the HAR file indicates that it used HTTP3. Otherwise it is HTTP2.
 
-Returns 2 or 3, depending on the HTTP version. 
+Returns the HTTP Version 2 or 3, the number of http2 responses and the number of http3 responses
 '''
 def getHTTPVersion(harFile):
     with open(harFile, 'r') as hf:
         harData = json.loads(hf.read())
-    httpVersion = 2
+    numHTTP2Responses = 0 
+    numHTTP3Responses = 0 
+    
     for entry in harData[kw.HAR_ROOT][kw.HAR_ENTRIES]:
         response = entry.get(kw.HAR_HTTP_RESPONSE)
         
         h3 = kw.SITESPEED_HTTP_VERSION_3 
-        if response is not None and response.get(kw.HAR_HTTP_VERSION_SUB) == h3:
-            httpVersion = 3
-            break
-    return httpVersion
+        if response is not None:
+            if response.get(kw.HAR_HTTP_VERSION_SUB) == h3:
+                numHTTP3Responses +=1
+                
+            else:
+                numHTTP2Responses +=1
+    if numHTTP3Responses > 0 :
+        httpVersion = 3
+    else:
+        httpVersion = 2
+
+    return httpVersion, numHTTP2Responses, numHTTP3Responses
 
 
 '''
@@ -206,7 +216,6 @@ def getLighthouseInfo(extractedData, lighthouseFilePath):
     for key in kw.LighthouseJsonArgs.GET_SCORE_LIST:
         score = score[key]
     extractedData[kw.LighthouseJsonArgs.PERFORMANCE_TITLE] = score
-
     # get audit scores
     audits = data[kw.LighthouseJsonArgs.AUDITS]
     for audit in kw.LighthouseJsonArgs.ADUITS_LIST:
@@ -214,6 +223,10 @@ def getLighthouseInfo(extractedData, lighthouseFilePath):
         if auditJson is None:
             extractedData[audit] = None
         else:
+            if auditJson["scoreDisplayMode"] == "error":
+                print("Lighthouse faced error for:", lighthouseFilePath)
+                return
+
             extractedData[audit + "_" + kw.LighthouseJsonArgs.SCORE] = auditJson[kw.LighthouseJsonArgs.SCORE]
             extractedData[audit + "_" + kw.LighthouseJsonArgs.NUMERIC_VALUE] = auditJson[kw.LighthouseJsonArgs.NUMERIC_VALUE]
 
@@ -236,7 +249,10 @@ def getCleanedPandas(BTJsonFile, harFile, lighthouseFilePath, throttleType, thro
     extractedData["throttleparameter"] = throttleparameter
 
     # Get HTTP version
-    extractedData[kw.HAR_HTTP_VERSION_SUB] = getHTTPVersion(harFile)
+    httpVersion, numHTTP2Responses, numHTTP3Responses = getHTTPVersion(harFile)
+    extractedData[kw.HAR_HTTP_VERSION_SUB] = httpVersion
+    extractedData[kw.NUM_HTTP2_REPONSES] = numHTTP2Responses
+    extractedData[kw.NUM_HTTP3_REPONSES] = numHTTP3Responses
 
     # Get Lighthouse Info
     getLighthouseInfo(extractedData, lighthouseFilePath)
