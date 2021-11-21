@@ -91,7 +91,7 @@ python split_metric.py
    11- average over all websites
    <br/>
    <br/>
-   c. `-yaxis` same thing, write the number of the measurement metric that you would like
+   c. `-yaxis` same thing, write the number of the measurement metric that you would like<br/>
    1- speed index score <br/>
    2- lighthouse performance <br/>
    3- ttfb mean (ttfb - time to first byte) <br/>
