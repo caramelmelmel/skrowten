@@ -1,32 +1,37 @@
 #file related
 import csv
 import argparse
+from posixpath import split
 import sys
 import os
 
 #plot related
 import matplotlib.pyplot as plt
-import seaborn as sb
-import numpy as np 
+import seaborn as sb 
 import pandas as pd
 
 #constants related
 from helper_ls import metric_ls_input
+from constant_mapper import input_mapper_y, input_mapper_y_label,website_mapper
 
 #plot two lines at once
-def plot_http_ver_comparison(http2_x_ls, http2_y_ls, http3_x_ls, http3_y_ls):
+def plot_http_ver_comparison(http2_x_ls, http2_y_ls, http3_x_ls, http3_y_ls,fig_file_p):
     plt.plot(http2_x_ls,http2_y_ls,label='HTTP 2')
     plt.plot(http3_x_ls,http3_y_ls,label='HTTP 3')
     plt.legend()
-    plt.show()
+    #save into a dir 
+    plt.savefig(fig_file_p)
 
 #to split for example the Mbps
-def split_params(str_input,split_param):
-    return str_input.split(split_param)
+def split_throttleparams(str_input,file_name):
+    if file_name == "delay.csv":
+        return str_input.split('ms')
+    if file_name == 'bandwidth.csv':
+        return str_input.split('Mbps')
 
 
-def plot_graphs(filein,website,x_label):
-    
+#plot based on the http version
+def plot_graphs(filein,website,x_label,y_input):
     #open the file in 
     data = pd.read_csv(filein)
 
@@ -37,29 +42,30 @@ def plot_graphs(filein,website,x_label):
     #select according to the stated x_label
     selected_df = data.loc[data['url']==website]
 
+    http2_x = []
+    http3_x = []
+    http2_y = []
+    http3_y = []
+
     for index,row in selected_df.iterrows():
         http_v = int(row['httpVersion'])
         if x_label == 'throttleparameter':
-            x_value = int(split_params(row['throttleparameter'],'Mbps'))
+            x_value = round(float(split_throttleparams(row[x_label],filein)[0]),5)
+
         else:
-            x_value = float(row[x_label])
-        
-        http2_x = []
-        http3_x = []
+            x_value = round(float(row[x_label]),5)
 
         #split into the http2 and http3
         if http_v == 2:
             http2_x.append(x_value)
+            http2_y.append(row[y_input])
+            
         if http_v == 3:
             http3_x.append(x_value)
-
-        #TODO add the y plots here for what you would like to plot
-        #add the plots for http2 and 3 and then call the
-        #plot_http_ver_comparison(http2_x_ls, http2_y_ls, http3_x_ls, http3_y_ls)
-        #for analysis
-
-    #TODO settle the file out here
-    #make the dirs here
+            http3_y.append(row[y_input])
+    save_file = f"results_graphs/{website}/{y_input}.png"
+    plot_http_ver_comparison(http2_x,http2_y,http3_x,http3_y,save_file)
+        
 
 
 if __name__ == "__main__":
@@ -67,14 +73,14 @@ if __name__ == "__main__":
     #add arguments to parse into the script
     parser = argparse.ArgumentParser()
     parser.add_argument("-m",dest="metric",help="metric")
-    parser.add_argument("-w",dest="website",help="website name (enter all in small caps)")
-    parser.add_argument("-yaxis",dest="y_label",help="y axis label")
+    parser.add_argument("-w",dest="website",help="website name (enter all in small caps)",type=int)
+    parser.add_argument("-yaxis",dest="y_label",help="y axis label",type=int)
     parser.add_argument("-xaxis",dest="x_label", help="x axis label")
     args = parser.parse_args()
 
 
-    website = "https://www." + args.website + ".com/"
-    print(f"You have entered the website as {args.website}")
+    website = website_mapper[args.website]
+    print(f"You have entered the website as {website}")
     metric = args.metric
 
     if (metric == None or args.website==None or args.y_label==None or args.x_label == None):
@@ -90,12 +96,22 @@ if __name__ == "__main__":
     if metric == "bandwidth":
         filein = "bandwidth.csv"
     
+    #manage directories here
+    if os.path.isdir('results_graphs') == False:
+        print('making the results_graph directory')
+        os.makedirs('results_graphs')
+    
+    if os.path.isdir('results_graphs/'+website) == False:
+        print(f"making the directory for {website}")
+        os.makedirs(f'results_graphs/{website}')
+    
     #label axis
     #Plot title here refers to that of the website
     plt.xlabel(args.x_label)
-    plt.ylabel(args.y_label)
-    plt.title(args.website + " "+metric)
-    plot_graphs(filein,website,args.x_label)
+    plt.ylabel(input_mapper_y_label[args.y_label])
+    plt.title(website + " "+metric)
+
+    plot_graphs(filein,website,args.x_label,input_mapper_y[args.y_label])
 
     
 
