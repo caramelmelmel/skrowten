@@ -87,7 +87,8 @@ python split_metric.py
    7- whatsapp <br/>
    8- forbes <br/>
    9- glassdoor <br/>
-   10- live
+   10- live <br/>
+   11- average over all websites
    <br/>
    <br/>
    c. `-yaxis` same thing, write the number of the measurement metric that you would like
