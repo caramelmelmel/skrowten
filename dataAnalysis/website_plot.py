@@ -69,8 +69,31 @@ def plot_graphs(filein,website,x_label,y_input):
             http3_y.append(row[y_input])
     print(len(http2_x))
     print(len(http2_y)) 
+    print(http2_x)
+    print(http2_y)
+    print(http3_x)
+    print(http3_y)
+    http2_x = {i: http2_x[i] for i in range(0, len(http2_x))}
+    http2_y = {i: http2_y[i] for i in range(0, len(http2_y))}
+    http3_x = {i: http3_x[i] for i in range(0, len(http3_x))}
+    http3_y = {i: http3_y[i] for i in range(0, len(http3_y))}
+    #get a tuple
+    http2_x = sorted(http2_x.items(), key=lambda x: x[1])
+    http3_x = sorted(http3_x.items(), key=lambda x: x[1])
+    http2_x_ls = []
+    http2_y_ls = []
+    http3_x_ls = []
+    http3_y_ls = []
+    for i in http2_x:
+        http2_x_ls.append(i[1])
+        http2_y_ls.append(http2_y[i[0]])
+    
+    for i in http3_x:
+        http3_x_ls.append(i[1])
+        http3_y_ls.append(http3_y[i[0]])
     save_file = f"results_graphs/{website}/{y_input}.png"
-    plot_http_ver_comparison(sorted(http2_x),sorted(http2_y),sorted(http3_x),sorted(http3_y),save_file)
+    #realised
+    plot_http_ver_comparison(http2_x_ls,http2_y_ls,http3_x_ls,http3_y_ls,save_file)
         
 
 
