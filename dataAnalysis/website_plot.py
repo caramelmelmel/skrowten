@@ -20,8 +20,8 @@ def plot_http_ver_comparison(http2_x_ls, http2_y_ls, http3_x_ls, http3_y_ls,fig_
     print(http2_y_ls)
     print(http3_x_ls)
     print(http3_y_ls)
-    plt.scatter(http2_x_ls,http2_y_ls,label='HTTP 2',c='#FF0000')
-    plt.scatter(http3_x_ls,http3_y_ls,label='HTTP 3',c='#FFA500')
+    plt.scatter(http2_x_ls,http2_y_ls,label='HTTP 2',c='#FF0000',alpha=0.8)
+    plt.scatter(http3_x_ls,http3_y_ls,label='HTTP 3',c='#FFA500',alpha=0.5,s=15**2)
     plt.legend()
     #save into a dir 
     plt.savefig(fig_file_p)
