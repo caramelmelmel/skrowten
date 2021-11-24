@@ -36,6 +36,82 @@ That's all, have fun running the script :D
 <br/>
 <br/>
 
+# Data Extraction Python Script
+
+## Overview
+
+The script extracts data that our team has deamed possibly important from each browsertime.har, browsertime.pageSummary.json and lighthouse.pageSummary.json files. These files are produced after each Sitespeed run. The data is then output as a csv file. 
+
+NOTE: Run this script only after having run the Sitespeed bash script. This script assumes that the locations of said .har and .json files follow the same pattern as the Sitespeed script's output. 
+
+
+## Pre-requisite
+1. Ensure that Pandas is installed
+
+```
+pip3 install pandas
+```
+
+## Running the Script
+
+### Using the Git Root Directory
+
+1. In a terminal, set the current directory to that of the parent of the folder `BrowserTimeResults`. BrowserTimeResults would have been produced from running the Sitespeed bash script. By default, this parent directory is this Git repository's root directory.
+
+2. Based on the throttle type and test set that you have run for the Sitespeed bash script, modify the following the command to run this data extraction script. 
+
+```
+python3 dataExtraction/main.py THROTTLE_TYPE SITELIST_NUM
+```
+
+- Where:
+
+   1. THROTTLE_TYPE is one of 3 possible types
+      - packetLoss
+      - bandwidth
+      - delay
+
+   <br/>
+
+   2. SITELIST_NUM is an integer 
+      - 1
+      - 2
+
+One possible command for running the script is:
+
+```
+python3 dataExtraction/main.py delay 1
+```
+
+### Using a Different Path
+
+1. If the `BrowserTimeResults` folder is in a different directory from the default, you may specify the path to its parent folder as the last parameter.
+
+```
+python3 dataExtraction/main.py THROTTLE_TYPE SITELIST_NUM PATH
+```
+
+- Where PATH is the full path to the parent dirctory of the `BrowserTimeResults` folder.
+
+For example, if the full path to BrowserTimeResults is `/home/bob/Documents/BrowserTimeResults`, the following command might be used:
+
+```
+python3 dataExtraction/main.py delay 1 /home/bob/Documents
+```
+
+*Please obtain the common parameters (THROTTLE_TYPE & SITELIST_NUM PATH) in [Using the Git Root Directory](#using-the-git-root-directory) Step 2.*
+
+
+## Obtaining the results
+
+1. The script will print out the location of the resulting csv file. You may find the csv there. 
+
+An example output:
+
+```
+Cleaned data written to csv file: /home/Documents/Networks/project/skrowten/extract_data/2021-11-25 00:38:30.860606/cleaned_data_2021-11-25 00:38:30.860606.csv
+```
+
 # Data Analysis Python Script
 
 ## How to Run

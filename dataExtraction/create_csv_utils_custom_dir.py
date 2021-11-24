@@ -42,7 +42,7 @@ def createCSVFromJsons(rootPath, currTime, throttleType, site_list_version):
                 if cleanedPdData is not None:
                     cleanedPdData.to_csv(csvFilePath, mode='a', header=includeHeader)
                     includeHeader = False
-    print("Cleaned data writtent to csv file:", csvFilePath)
+    print("Cleaned data written to csv file:", csvFilePath)
     return csvFilePath
 
 

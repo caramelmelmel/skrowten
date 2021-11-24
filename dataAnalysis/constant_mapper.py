@@ -32,4 +32,5 @@ website_mapper = {
     9: "https://www.glassdoor.com/",
     10: "https://www.live.com/",
     11: "average",
+    12: "weighted_average",
 }

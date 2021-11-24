@@ -53,20 +53,24 @@ def plot_graphs(metric,filein,website,x_label,y_input):
     http3_x_ls = []
     http3_y_ls = []
 
-    if website != 'average':
+    if website != 'average' and website != "weighted_average":
         #select according to the stated x_label
         selected_df = data.loc[data['url']==website]
 
         for index,row in selected_df.iterrows():
             http_v = int(row['httpVersion'])
+            x_val = row[x_label].replace("%",'')
+            x_val = x_val.replace("ms",'')
+            x_val = x_val.replace("Mbps",'')
             if x_label == 'throttleparameter':
-                if metric == 'packetLoss':
-                    x_value = float(row[x_label]) * 100
-                else:
-                    x_value = round(float(split_throttleparams(row[x_label],filein)[0]),5)
-            else:
-                x_value = round(float(row[x_label]),5)
 
+                if metric == 'packetLoss':
+                    
+                    x_value = x_val * 100
+                else:
+                    x_value = round(float(x_val),5)
+            else:
+                x_value = round(float(x_val),5)
             #split into the http2 and http3
             if http_v == 2:
                 http2_x.append(x_value)
@@ -100,20 +104,34 @@ def plot_graphs(metric,filein,website,x_label,y_input):
             http3_x_ls.append(i[1])
             http3_y_ls.append(http3_y[i[0]])
 
-    else:
+    elif website == 'average':
+        urls = [
+            "https://www.facebook.com/",
+            "https://www.instagram.com/",
+            "https://www.glassdoor.com/",
+            "https://www.canva.com/",
+            "https://www.youtube.com/",
+            "https://www.google.com/",
+        ]
         averageByMetricDictHTTP2 = {}
         averageByMetricDictHTTP3 = {}
 
         for index,row in data.iterrows():
+            if(row["url"] not in urls):
+                continue
             http_v = int(row['httpVersion'])
+            x_val = row[x_label].replace("%",'')
+            x_val = x_val.replace("ms",'')
+            x_val = x_val.replace("Mbps",'')
 
             if x_label == 'throttleparameter':
                 if metric == 'packetLoss':
-                    x_value = float(row[x_label]) * 100
+                    
+                    x_value = x_val * 100
                 else:
-                    x_value = round(float(split_throttleparams(row[x_label],filein)[0]),5)
+                    x_value = round(float(x_val),5)
             else:
-                x_value = round(float(row[x_label]),5)
+                x_value = round(float(x_val),5)
 
             if http_v == 2:
                 if x_value not in averageByMetricDictHTTP2:
@@ -143,7 +161,87 @@ def plot_graphs(metric,filein,website,x_label,y_input):
 
             http2_y_ls.append(http2_average_score)
             http3_y_ls.append(http3_average_score)
+    else:
+        urls = [
+            "https://www.facebook.com/",
+            "https://www.instagram.com/",
+            "https://www.glassdoor.com/",
+            "https://www.canva.com/",
+            "https://www.youtube.com/",
+            "https://www.google.com/",
+        ]
+        segmented_data = {} #key: throttle param, val = {url: [[stat, http2type, http3 fraction]]}
 
+        for index,row in data.iterrows():
+            if(row["url"] not in urls):
+                continue
+            http_v = int(row['httpVersion'])
+            x_val = row[x_label].replace("%",'')
+            x_val = x_val.replace("ms",'')
+            x_val = x_val.replace("Mbps",'')
+
+            if x_label == 'throttleparameter':
+                if metric == 'packetLoss':
+                    
+                    x_value = x_val * 100
+                else:
+                    x_value = round(float(x_val),5)
+            else:
+                x_value = round(float(x_val),5)
+        
+            segmented_data[x_value] = segmented_data.get(x_value, {})
+            data = segmented_data[x_value].get(row['url'], [])
+            
+            if http_v == 2:
+                data.append((row[y_input], http_v, None))
+
+            elif http_v == 3:
+                http3_response_fraction = float(row["num_http3_responses"])/ (float(row["num_http3_responses"]) + float(row["num_http2_responses"]))
+                data.append((row[y_input], http_v, http3_response_fraction))
+            
+            segmented_data[x_value][row['url']] = data
+
+        print(segmented_data)
+        x_keys = sorted(segmented_data.keys())  # Keys for HTTP2 and 3 are the same
+
+        for key in x_keys:
+            http2_x_ls.append(key)
+            http3_x_ls.append(key)
+            # get all weighted average
+
+            http2_http3_values = segmented_data[key]
+            total_fraction = 0
+            url_weights = {}
+            for url in http2_http3_values:
+                for index in http2_http3_values[url]:
+                    # for _, version, fraction in index:
+                    if index[1]==3:
+                        url_weights[url] = index[2]
+                        total_fraction+=index[2]
+            
+            http3_average_score = 0 
+            http2_average_score = 0
+            for url in http2_http3_values:
+                for index in http2_http3_values[url]:
+                        stat = index[0]
+                        if index[1]==3:
+                            http3_average_score += stat* (url_weights[url])/len(http2_http3_values)
+                            # http3_average_score += stat* (url_weights[url]/total_fraction)/len(http2_http3_values)
+                        else:
+                            http2_average_score += stat* (url_weights[url])/len(http2_http3_values)
+                            # http2_average_score += stat* (url_weights[url]/total_fraction)/len(http2_http3_values)
+
+
+            # for stat, fraction in http3_results_list:
+            #     # Sum of weighted terms / num of terms
+            #     http3_average_score += stat* (fraction/total_fraction)/len(http3_results_list)
+            #     http2_average_score += stat* (fraction/total_fraction)/len(http3_results_list)
+            #     sum(http2_results_list) / len(http2_results_list)
+
+                
+
+            http2_y_ls.append(http2_average_score)
+            http3_y_ls.append(http3_average_score)
     
     save_file = f"results_graphs/{website}/{y_input}_{metric}.png"
     #realised
@@ -172,11 +270,11 @@ if __name__ == "__main__":
         raise ValueError("Please enter either delay, packetLoss or bandwidth as the metric")
 
     if metric == "delay":
-        filein = "delay.csv"
+        filein = "delay_cleaned_data_with_num_requests.csv"
     if metric == "packetLoss":
-        filein = "packet_loss.csv"
+        filein = "packetLoss_cleaned_data_with_num_requests.csv"
     if metric == "bandwidth":
-        filein = "bandwidth.csv"
+        filein = "bandwidth_cleaned_data_with_num_requests.csv"
     
     #manage directories here
     if os.path.isdir('results_graphs') == False:
