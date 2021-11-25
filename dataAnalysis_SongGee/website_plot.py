@@ -75,13 +75,6 @@ def plot_graphs(metric,filein,website,x_label,y_input):
                 http3_x.append(x_value)
                 http3_y.append(row[y_input])
 
-        print(len(http2_x))
-        print(len(http2_y)) 
-        print(http2_x)
-        print(http2_y)
-        print(http3_x)
-        print(http3_y)
-
         http2_x = {i: http2_x[i] for i in range(0, len(http2_x))}
         http2_y = {i: http2_y[i] for i in range(0, len(http2_y))}
         http3_x = {i: http3_x[i] for i in range(0, len(http3_x))}
@@ -122,8 +115,6 @@ def plot_graphs(metric,filein,website,x_label,y_input):
                 else:
                     averageByMetricDictHTTP3[x_value] = averageByMetricDictHTTP3[x_value] + [row[y_input]]
             
-        print(averageByMetricDictHTTP2)
-        print(averageByMetricDictHTTP3)
 
         x_keys = sorted(averageByMetricDictHTTP2.keys())  # Keys for HTTP2 and 3 are the same
 

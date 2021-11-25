@@ -16,10 +16,6 @@ from constant_mapper import input_mapper_y, input_mapper_y_label, website_mapper
 
 #plot two lines at once
 def plot_http_ver_comparison(http2_x_ls, http2_y_ls, http3_x_ls, http3_y_ls,fig_file_p):
-    print(http2_x_ls)
-    print(http2_y_ls)
-    print(http3_x_ls)
-    print(http3_y_ls)
     plt.scatter(http2_x_ls,http2_y_ls,label='HTTP 2',c='#FF0000',alpha=0.8)
     plt.scatter(http3_x_ls,http3_y_ls,label='HTTP 3',c='#FFA500',alpha=0.5,s=15**2)
     plt.legend()
@@ -80,12 +76,6 @@ def plot_graphs(metric,filein,website,x_label,y_input):
                 http3_x.append(x_value)
                 http3_y.append(row[y_input])
 
-        print(len(http2_x))
-        print(len(http2_y)) 
-        print(http2_x)
-        print(http2_y)
-        print(http3_x)
-        print(http3_y)
 
         http2_x = {i: http2_x[i] for i in range(0, len(http2_x))}
         http2_y = {i: http2_y[i] for i in range(0, len(http2_y))}
@@ -144,8 +134,6 @@ def plot_graphs(metric,filein,website,x_label,y_input):
                 else:
                     averageByMetricDictHTTP3[x_value] = averageByMetricDictHTTP3[x_value] + [row[y_input]]
             
-        print(averageByMetricDictHTTP2)
-        print(averageByMetricDictHTTP3)
 
         x_keys = sorted(averageByMetricDictHTTP2.keys())  # Keys for HTTP2 and 3 are the same
 
@@ -226,19 +214,9 @@ def plot_graphs(metric,filein,website,x_label,y_input):
                         stat = index[0]
                         if index[1]==3:
                             http3_average_score += stat* (url_weights[url])/len(http2_http3_values)
-                            # http3_average_score += stat* (url_weights[url]/total_fraction)/len(http2_http3_values)
+
                         else:
                             http2_average_score += stat* (url_weights[url])/len(http2_http3_values)
-                            # http2_average_score += stat* (url_weights[url]/total_fraction)/len(http2_http3_values)
-
-
-            # for stat, fraction in http3_results_list:
-            #     # Sum of weighted terms / num of terms
-            #     http3_average_score += stat* (fraction/total_fraction)/len(http3_results_list)
-            #     http2_average_score += stat* (fraction/total_fraction)/len(http3_results_list)
-            #     sum(http2_results_list) / len(http2_results_list)
-
-                
 
             http2_y_ls.append(http2_average_score)
             http3_y_ls.append(http3_average_score)
