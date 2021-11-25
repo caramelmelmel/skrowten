@@ -1,10 +1,12 @@
 # 50.012 Networks Project Fall 2021 <a name="top"></a>
-<p align="center"><img alt="Overdue! Logo" width="420px" src="./images/skrowten_logo.png"></p>
+<p align="center"><img width="420px" src="./images/skrowten_logo.png"></p>
 
 ![Powered By](https://img.shields.io/badge/powered%20by-skrowten-brightgreen)
 ![Forks](https://img.shields.io/github/forks/caramelmelmel/skrowten)
 ![Stars](https://img.shields.io/github/stars/caramelmelmel/skrowten?color=red)
 ![Issues](https://img.shields.io/github/issues/caramelmelmel/skrowten)
+
+Team Skrowten presents our networks project for your reference. Kindly cite us if you ever find our results useful.
 
 ## Table Of Contents <a name="toc"></a>
 - [Networks Project](#top)
@@ -13,10 +15,13 @@
   - [Environment Setup](#envsetup)
   - [Approach](#approach)
   - [Sitespeed bash script](#bashscript)
+  - [Data Extraction Python Script](#dataextraction)
   - [Data Analysis](#da)
+  - [Results](#results)
   - [Conclusion](#conclusion)
   - [Future Work](#fw)
   - [Contributing](#Contribute)
+  - [References](#ref)
   - [Acknowledgements](#acknowledgements)
 
 
@@ -68,7 +73,7 @@ Some important variables currently set in the script:
 | noOfIntervals           | 11            | Decides how many network impairments we test, starting interval is from 0                    |
 | iterations              | 3             | How many repeated runs are done per website test                                             |
 
-## Running the Script
+### Running the Script
 The list of websites that we tested on are in `testing_sites1.txt` and `testing_sites2.txt`.
 
 You can run the script with this command (sudo needed for tc command in script):
@@ -84,17 +89,17 @@ You will then be prompted to choose the Network Impairment you want to run the t
 | Person 1 (testing_sites1.txt) | Melody | Song Gee    | Hannah    |
 | Person 2 (testing_sites2.txt) | Jerome | Marcus      | Jun Wei   |
 
-## Uploading Files
+### Uploading Files
 
-You don't need to worry about uploading excess files, as Hannah has configured the gitignore to exclude unnecessary files and only include those we need. You can run the script, and the files will be saved in a folder unique to your assigned configuration, which you can upload in a commit. If you choose the right config, your files should not conflict or overwrite someone else's.
+You don't need to worry about uploading excess files, as the gitignore to has been configured to exclude unnecessary files and only include those needed. You can run the script, and the files will be saved in a folder unique to your assigned configuration, which you can upload in a commit. If you choose the right config, your files should not conflict or overwrite someone else's.
 
 That's all, have fun running the script :D
 <br/>
 <br/>
 
-# Data Extraction Python Script
+## Data Extraction Python Script <a name="dataextraction"></a>
 
-## Overview
+### Overview
 
 The script extracts data that our team has deamed possibly important from each `browsertime.har`, `browsertime.pageSummary.json` and `lighthouse.pageSummary.json` files. These files are produced after each Sitespeed run. The data is then output as a csv file. 
 
@@ -154,7 +159,7 @@ python3 dataExtraction/main.py delay 1 /home/bob/Documents
 *Please obtain the common parameters (THROTTLE_TYPE & SITELIST_NUM PATH) in [Using the Git Root Directory](#using-the-git-root-directory) Step 2.*
 
 
-## Obtaining the results
+### Obtaining the results
 
 1. The script will print out the location of the resulting csv file. You may find the csv there. 
 
@@ -164,9 +169,9 @@ An example output:
 Cleaned data written to csv file: /home/Documents/Networks/project/skrowten/extract_data/2021-11-25 00:38:30.860606/cleaned_data_2021-11-25 00:38:30.860606.csv
 ```
 
-# Data Analysis Python Script <a name="da"></a>
+## Data Analysis Python Script <a name="da"></a>
 
-## How to Run
+### How to Run
 
 1. Get into the directory else the csv file not found error is thrown even if you use dataAnalysis/{file_name}
 
@@ -198,11 +203,11 @@ On Windows:
 python split_metric.py
 ```
 
-3. The script works on the following flags READ CAREFULLY:
+3. The script works on the following flags:
    <br/>
    <br/>
    a. `-m` which means that you can input the metric that you are looking out for
-   The only valid arguments are `delay`, `packetLoss` and `bandwidth`. Key in the EXACT syntax so that no exceptions are raised.
+   The only valid arguments are `delay`, `packetLoss` and `bandwidth`. Key in the <span style="background-color:yellow; color:red">exact</span> syntax so that no exceptions are raised.
    <br/>
    <br/>
    b. `-w` write the integer of the website that you want. The manual is as follows:<br/>
@@ -236,6 +241,14 @@ An example of how to call the script would be the following:
 ```
 python3 website_plot.py -m "delay" -w 2 -yaxis 2 -xaxis "throttleparameter"
 ```
+## Results <a name="results"></a>
+We produced some test runs and obtained some results. The results are located in the `dataAnalysis/results_graphs` directory. If you would like to view a sample of results, you may go there and view it. One such sample of a scatter plot that we ran on an individual website is shown below.
+<p><img width="px" src="./dataAnalysis/results_graphs/https:/www.facebook.com/ttfb_mean.png"></p>
+
+To get the average performance for all websites, it can be shown in the `dataAnalysis/results_graphs/weighted_average`.
+One example plot is shown below:
+<p><img width="px" src="./dataAnalysis/results_graphs/weighted_average/speed-index_score_delay.png"></p>
+
 ## Conclusion <a name="conclusion"></a>
 1. Running various network conditions, we got random results and we don't seem to see a clear trend. Each metric of measurement is not independent of one another.
 
@@ -245,8 +258,15 @@ python3 website_plot.py -m "delay" -w 2 -yaxis 2 -xaxis "throttleparameter"
 ## Future Work <a name="fw"></a>
 We are looking at the following:
 - Running more rounds of our experimental setup.
-- Running our simulated tests on the websites that are still in the developmental phase of supporting HTTP 3.
+- Running our simulated tests on the websites that are still in the developmental phase of supporting HTTP 3 or applications that support HTTP 3 (eg. Facebook Lite).
 - Doing up a private server which we did not manage to complete due to the lack of time.
+
+## References <a name="ref"></a>
+We referred to two of our literature reviews and performed our experiment approaches based on them.
+
+1. M. Trevisan, D. Giordano, I. Drago and A. S. Khatouni, "Measuring HTTP/3: Adoption and Performance," 2021 19th Mediterranean Communication and Computer Networking Conference (MedComNet), 2021, pp. 1-8, doi: 10.1109/MedComNet52149.2021.9501274.
+
+2. Saif, Darius & Lung, Chung-Horng & Matrawy, Ashraf. (2020). An Early Benchmark of Quality of Experience Between HTTP/2 and HTTP/3 using Lighthouse. 
 
 ## Contribution <a name="Contribute"></a>
 You can read the guidelines in the `Contributing.md`.

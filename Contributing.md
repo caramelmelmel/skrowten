@@ -9,3 +9,6 @@
 1. Do let us know if you would like to contribute by creating an issue.
 2. Give us more details about your proposed feature.
 3. Follow the above section if you would like to contribute.
+
+## Finding bugs that you would like us to fix
+File an issue and place the label bug-fix to allow us to review a bug fix.
