@@ -251,9 +251,9 @@ We are looking at the following:
 ## Contribution <a name="Contribute"></a>
 You can read the guidelines in the `Contributing.md`.
 ## Acknowledgements <a name="acknowledgements"></a>
-[Jerome Heng](https://github.com/kraftedcheese)
-[Lim Jun Wei](https://github.com/junwei567)
-[Ang Song Gee](https://github.com/angsg97)
-[Mah Qing Long Hannah Jean](https://github.com/jeanmah)
-[Marcus Ho Jun Wei](https://github.com/marcushojww)
-[Leong Yun Qin Melody](https://github.com/caramelmelmel)
+[Jerome Heng](https://github.com/kraftedcheese)<br/>
+[Lim Jun Wei](https://github.com/junwei567)<br/>
+[Ang Song Gee](https://github.com/angsg97)<br/>
+[Mah Qing Long Hannah Jean](https://github.com/jeanmah)<br/>
+[Marcus Ho Jun Wei](https://github.com/marcushojww)<br/>
+[Leong Yun Qin Melody](https://github.com/caramelmelmel)<br/>
