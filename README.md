@@ -1,10 +1,13 @@
 # 50.012 Networks Project Fall 2021 <a name="top"></a>
 <p align="center"><img width="420px" src="./images/skrowten_logo.png"></p>
+<span align="center">
 
 ![Powered By](https://img.shields.io/badge/powered%20by-skrowten-brightgreen)
 ![Forks](https://img.shields.io/github/forks/caramelmelmel/skrowten)
 ![Stars](https://img.shields.io/github/stars/caramelmelmel/skrowten?color=red)
 ![Issues](https://img.shields.io/github/issues/caramelmelmel/skrowten)
+
+</span>
 
 Team Skrowten presents our networks project for your reference. Kindly cite us if you ever find our results useful.
 
