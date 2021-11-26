@@ -6,10 +6,14 @@
 browsertimeVersion="20.5.0-plus1"
 preURL="https://www.lazada.sg/"
 
+delayTestingFolder="delayRunResults"
 baseTestingFolder="BrowserTimeResults"
 networkImpairmentFolder=""
 outputFolderHTTP2="HTTP2_testing"
 outputFolderHTTP3="HTTP3_testing"
+
+# Get User Name for Directory (everyone will be running as root)
+read -p "Enter name (1 word): " userName
 
 # User Select for Network Impairment
 networkImpairmentChoices='delay bandwidth packetLoss'  # Bash script array
@@ -25,10 +29,10 @@ echo $networkImpairment
 echo "-------------------------"
 
 # User Select for testing_sites txt files
-testingSiteChoices='testing_sites1 testing_sites2'
+testingSiteChoices='testing_sites1 testing_sites2 testing_sites3'
 testingSite=''
 testingSiteTxtName=''
-PS3='Select which testing_sites file to use (Input number from 1 to 2): '
+PS3='Select which testing_sites file to use (Input number from 1 to 3): '
 select _ in $testingSiteChoices
 do
 	testingSiteTxtName=$_
@@ -40,13 +44,12 @@ echo $testingSiteTxtName
 echo $testingSite
 echo "-------------------------"
 
-
 # Prepare Network Impairment variables for start of for loop
 networkImpairmentAmount=0
-delayIntervalSize=100  # 0ms to 1000ms
-bandwidthIntervalSize=80  # 0Mbps to 1000Mbps
-packetLossIntervalSize=0.15  # 0% to 1.5%
-noOfIntervals=11  # 11
+delayIntervalSize=200  # 0ms to 1000ms
+bandwidthIntervalSize=160  # 0Mbps to 1000Mbps
+packetLossIntervalSize=0.30  # 0% to 1.5%
+noOfIntervals=6  # 11
 iterations=3  # Number of repeated trials ran for each website in every run
 
 # Counters
@@ -54,7 +57,6 @@ intervalCounter=1
 
 while [ $intervalCounter -le $noOfIntervals ]  # while intervalCounter <= noOfIntervals
 do
-
 	echo 'Stopping Docker networks'
 	docker network rm 3g
 
@@ -110,14 +112,14 @@ do
 		echo "--------- $site ------------"
 		docker run --rm -v "$(pwd):/sitespeed.io" sitespeedio/sitespeed.io:$browsertimeVersion \
 			--network=3g -c 3g -n $iterations --video false --visualMetrics false --prettyPrint true --cacheClearRaw true \
-			--preURL $preURL --outputFolder "$baseTestingFolder/$networkImpairment/$testingSiteTxtName/$outputFolderHTTP2/$networkImpairmentFolder" $site \
-			--plugins.add analysisstorer --plugins.add /lighthouse --chrome.args="--disable-quic"
+			--preURL $preURL --outputFolder "$delayTestingFolder/$userName/$baseTestingFolder/$networkImpairment/$testingSiteTxtName/$outputFolderHTTP2/$networkImpairmentFolder" $site \
+			--plugins.add analysisstorer --plugins.add /lighthouse --lighthouse.iterations=$iterations --chrome.args="--disable-quic"
 
 		echo "----- Done Site $siteCounter ($site) HTTP2 with $networkImpairmentFolder $networkImpairment -----"
 		docker run --rm -v "$(pwd):/sitespeed.io" sitespeedio/sitespeed.io:$browsertimeVersion \
 			--network=3g -c 3g -n $iterations --video false --visualMetrics false --prettyPrint true --cacheClearRaw true \
-			--preURL $preURL --outputFolder "$baseTestingFolder/$networkImpairment/$testingSiteTxtName/$outputFolderHTTP3/$networkImpairmentFolder" $site \
-			--plugins.add analysisstorer --plugins.add /lighthouse
+			--preURL $preURL --outputFolder "$delayTestingFolder/$userName/$baseTestingFolder/$networkImpairment/$testingSiteTxtName/$outputFolderHTTP3/$networkImpairmentFolder" $site \
+			--plugins.add analysisstorer --plugins.add /lighthouse --lighthouse.iterations=$iterations
 
 		echo "----- Done Site $siteCounter ($site) HTTP3 $networkImpairmentFolder $networkImpairment -----"
 
@@ -127,3 +129,4 @@ do
 
 	((intervalCounter++))
 done
+
