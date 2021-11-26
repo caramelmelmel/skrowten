@@ -5,8 +5,6 @@ from datetime import datetime
 import sys
 import os
 
-CONNECTIVITY_TESTED = ["3g"]
-
 PACKET_LOSS = "packetLoss"
 BANDWIDTH = "bandwidth"
 DELAY = "delay"

@@ -106,15 +106,17 @@ That's all, have fun running the script :D
 
 The script extracts data that our team has deamed possibly important from each `browsertime.har`, `browsertime.pageSummary.json` and `lighthouse.pageSummary.json` files. These files are produced after each Sitespeed run. The data is then output as a csv file. 
 
+[Separating By Throttle Parameter](#separating-by-throttle-parameter): The script run from `dataExtraction/main.py` allows one to extract data from bandwith, delay and packet loss runs with website text files 1 and 2 defined in the Sitespeed script. 
+[Collection for testing sites3 varying delay](#collection-for-testing-sites3-varying-delay): To collect specifically for delay with website text file 3, use `dataExtraction/delay_extraction_main.py`
+
 NOTE: Run this script only after having run the Sitespeed bash script. This script assumes that the locations of said .har and .json files follow the same pattern as the Sitespeed script's output. 
 
-
-## Pre-requisite
+### Pre-requisite
 1. Ensure that Pandas is installed. You can refer to the setup [above](#envsetup)
 
-## Running the Script
+### Separating By Throttle Parameter
 
-### Using the Git Root Directory
+#### Using the Git Root Directory
 
 1. In a terminal, set the current directory to that of the parent of the folder `BrowserTimeResults`. BrowserTimeResults would have been produced from running the Sitespeed bash script. By default, this parent directory is this Git repository's root directory.
 
@@ -143,7 +145,7 @@ One possible command for running the script is:
 python3 dataExtraction/main.py delay 1
 ```
 
-### Using a Different Path
+#### Using a Different Path
 
 1. If the `BrowserTimeResults` folder is in a different directory from the default, you may specify the path to its parent folder as the last parameter.
 
@@ -161,6 +163,34 @@ python3 dataExtraction/main.py delay 1 /home/bob/Documents
 
 *Please obtain the common parameters (THROTTLE_TYPE & SITELIST_NUM PATH) in [Using the Git Root Directory](#using-the-git-root-directory) Step 2.*
 
+
+### Collection for testing sites3 varying delay
+
+#### Using the Git Root Directory
+
+1. In a terminal, set the current directory to that of the parent of the folder `delayRunResults`. delayRunResults would have been produced from running the Sitespeed bash script. By default, this parent directory is this Git repository's root directory.
+
+2. Run the following command
+
+```
+python3 dataExtraction/delay_extraction_main.py
+```
+
+#### Using a Different Path
+
+1. If the `delayRunResults` folder is in a different directory from the default, you may specify the path to its parent folder as the last parameter.
+
+```
+python3 dataExtraction/delay_extraction_main.py PATH
+```
+
+- Where PATH is the full path to the parent dirctory of the `delayRunResults` folder.
+
+For example, if the full path to BrowserTimeResults is `/home/bob/Documents/delayRunResults`, the following command might be used:
+
+```
+python3 dataExtraction/delay_extraction_main.py /home/bob/Documents
+```
 
 ### Obtaining the results
 

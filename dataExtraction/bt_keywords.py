@@ -116,7 +116,6 @@ class LighthouseJsonArgs:
     # audit keywords
     AUDITS = "audits"
     SCORE = "score"
-    SCORE = "score"
     NUMERIC_VALUE = "numericValue"
     
     # Audit titles
@@ -126,9 +125,18 @@ class LighthouseJsonArgs:
     TOTAL_BLOCKING_TIME = "total-blocking-time"
     CUMULATIVE_LAYOUT_SHIFT = "cumulative-layout-shift"
 
-    # CATEGORIES.PERFORMANCE.SCORE
+    # stats wanted
+    MEDIAN = "median"
+    MEAN = "mean"
+
+    # CATEGORIES.PERFORMANCE
     GET_SCORE_LIST = [
-        CATEGORIES, PERFORMANCE, SCORE
+        CATEGORIES, PERFORMANCE
+    ]
+
+    PERFORMANCE_STAT_KEYS = [
+        MEDIAN,
+        MEAN,
     ]
 
     ADUITS_LIST = [
@@ -138,4 +146,3 @@ class LighthouseJsonArgs:
         TOTAL_BLOCKING_TIME, 
         CUMULATIVE_LAYOUT_SHIFT
     ]
-
