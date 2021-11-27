@@ -6,7 +6,9 @@
 **/js/*
 **/logs
 *.html
+**/data/*
 **/pages/*/data/*
+**/*.summary.json
 !**/pages/*/data/browsertime.pageSummary.json
 !**/pages/*/data/browsertime.har
 !**/pages/*/data/lighthouse.pageSummary.json
