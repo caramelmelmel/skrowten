@@ -46,9 +46,7 @@ do
 	# Prepare Network Impairment variables for start of for loop
 	networkImpairmentAmount=0
 	delayIntervalSize=200  # 0ms to 1000ms
-	bandwidthIntervalSize=160  # 0Mbps to 1000Mbps
-	packetLossIntervalSize=0.30  # 0% to 1.5%
-	noOfIntervals=6  # 6 used to be 11
+	noOfIntervals=6  # 6 
 	iterations=3  # Number of repeated trials ran for each website in every run
 	
 	# Counters
