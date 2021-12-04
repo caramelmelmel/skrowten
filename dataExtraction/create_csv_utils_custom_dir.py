@@ -5,6 +5,8 @@ import json
 import os  
 import sys
 
+SKIP_LIGHTHOUSE_METRICS=False
+
 '''
 This function retrieves all the results from the custom results 
 directory and extracts the fields we deem necessary into a csv file. 
@@ -15,20 +17,30 @@ provided root directory.
 
 Returns: csv file path. 
 '''
-def createCSVFromJsons(rootPath, currTime, throttleType, site_list_version):
+def createCSVFromJsons(rootPath, currTime, throttleType, site_list_version, csvDir=None, csvFilePath=None, skipLighthouseMetrics=False):
+    global SKIP_LIGHTHOUSE_METRICS
+    SKIP_LIGHTHOUSE_METRICS = skipLighthouseMetrics
     resultsDir = os.path.join(rootPath, kw.BT_CUSTOM_DIR, throttleType, site_list_version)
     if not os.path.exists(resultsDir):
         print(resultsDir, "directory not found in root path.")
         sys.exit(1)
     
-    csvDir = os.path.join(rootPath, kw.EXTRACT_DATA_DIR, str(currTime))
-    if not os.path.exists(csvDir):
-        os.makedirs(csvDir)
 
-    csvFileName = "{}_{}.csv".format(kw.CSV_FILE, currTime)
-    csvFilePath = os.path.join(csvDir, csvFileName)
+    if csvFilePath == None:
+        includeHeader=True
+        if csvDir == None:
+            csvDir = os.path.join(rootPath, kw.EXTRACT_DATA_DIR, str(currTime))
+        if not os.path.exists(csvDir):
+            os.makedirs(csvDir)
 
-    includeHeader = True
+        csvFileName = "{}_{}.csv".format(kw.CSV_FILE, currTime)
+        csvFilePath = os.path.join(csvDir, csvFileName)
+
+    else:
+        includeHeader = False
+        if not os.path.isfile(csvFilePath):
+            print(csvFilePath, "csv file not found")
+            sys.exit(1)
 
     for httpDirName in kw.HTTP_DIR_LIST:
         httpDir = os.path.join(resultsDir, httpDirName)
@@ -212,23 +224,31 @@ def getLighthouseInfo(extractedData, lighthouseFilePath):
         data = json.load(file)
 
     # get perfoamce score
-    score = data
+    performance = data
     for key in kw.LighthouseJsonArgs.GET_SCORE_LIST:
-        score = score[key]
-    extractedData[kw.LighthouseJsonArgs.PERFORMANCE_TITLE] = score
-    # get audit scores
-    audits = data[kw.LighthouseJsonArgs.AUDITS]
-    for audit in kw.LighthouseJsonArgs.ADUITS_LIST:
-        auditJson = audits.get(audit, None)
-        if auditJson is None:
-            extractedData[audit] = None
-        else:
-            if auditJson["scoreDisplayMode"] == "error":
-                print("Lighthouse faced error for:", lighthouseFilePath)
-                return
+        performance = performance[key]
+    if kw.LighthouseJsonArgs.SCORE in performance:
+        extractedData[kw.LighthouseJsonArgs.PERFORMANCE_TITLE] = performance[kw.LighthouseJsonArgs.SCORE]
+    else:
+        for performance_stat in kw.LighthouseJsonArgs.PERFORMANCE_STAT_KEYS:
+            extractedData[kw.LighthouseJsonArgs.PERFORMANCE_TITLE+"_"+performance_stat] = performance[performance_stat]
 
-            extractedData[audit + "_" + kw.LighthouseJsonArgs.SCORE] = auditJson[kw.LighthouseJsonArgs.SCORE]
-            extractedData[audit + "_" + kw.LighthouseJsonArgs.NUMERIC_VALUE] = auditJson[kw.LighthouseJsonArgs.NUMERIC_VALUE]
+
+    # get audit scores
+    audits = data.get(kw.LighthouseJsonArgs.AUDITS, None)
+    if audits !=None:
+        for audit in kw.LighthouseJsonArgs.ADUITS_LIST:
+            auditJson = audits.get(audit, None)
+            if auditJson is None:
+                if not SKIP_LIGHTHOUSE_METRICS:
+                    extractedData[audit] = None
+            else:
+                if auditJson["scoreDisplayMode"] == "error":
+                    print("Lighthouse faced error for:", lighthouseFilePath)
+                    return
+
+                extractedData[audit + "_" + kw.LighthouseJsonArgs.SCORE] = auditJson[kw.LighthouseJsonArgs.SCORE]
+                extractedData[audit + "_" + kw.LighthouseJsonArgs.NUMERIC_VALUE] = auditJson[kw.LighthouseJsonArgs.NUMERIC_VALUE]
 
 '''
 This function extracts the necessary data from the Json and Har files 
